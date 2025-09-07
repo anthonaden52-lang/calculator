@@ -447,3 +447,72 @@
 </body>
 </html>
 
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="h5 mb-3">📧 Contact / Feedback</h4>
+          <form action="https://formspree.io/f/xyzdlwej" method="POST">
+            <div class="mb-3">
+              <label for="email" class="form-label">Your Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Message</label>
+              <textarea class="form-control" id="message" name="message" rows="4" placeholder="Type your feedback..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #fff;
+  background-attachment: fixed;
+}
+
+.calculator-container, .card {
+  background: rgba(30, 30, 40, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.calculator-container:hover, .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.55);
+}
+
+.nav-tabs .nav-link.active {
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  color: #fff !important;
+  border-radius: 0.75rem 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.btn-primary, .btn-info {
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-info:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
+}
+
+.result-value {
+  animation: fadeInScale 0.4s ease;
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
