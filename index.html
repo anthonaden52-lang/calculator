@@ -3,279 +3,278 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advanced Calculator - Fractions & Scientific Notation</title>
-  <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet" />
+  <title>7th Grade Math Toolkit — Advanced Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      background: linear-gradient(135deg, #0f1724, #071129 60%, #041022);
       background-attachment: fixed;
       color: #fff;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
 
     .calculator-container, .card {
-      background: rgba(30, 30, 40, 0.85);
-      backdrop-filter: blur(12px);
-      border-radius: 1.25rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      background: rgba(30, 30, 40, 0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 1rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      transition: transform 0.18s ease, box-shadow 0.25s ease;
     }
 
-    .calculator-container:hover, .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.55);
-    }
+    .calculator-container:hover, .card:hover { transform: translateY(-4px); }
 
-    .calculator-panel { padding: 2rem; }
+    .nav-tabs { border-bottom: none; gap:8px; }
+    .nav-tabs .nav-link { border: none; padding: .7rem 1rem; border-radius: .8rem; color: #cbd5e1; }
+    .nav-tabs .nav-link.active { background: linear-gradient(90deg,#06b6d4,#3b82f6); color:#fff; font-weight:600; }
 
-    .nav-tabs {
-      border-bottom: none;
-    }
+    .examples-help { background: rgba(255,255,255,0.03); padding: .8rem; border-radius: .5rem; }
+    .example-btn { font-size: .78rem; padding: .25rem .5rem; border-radius: 20px; }
 
-    .nav-tabs .nav-link {
-      border: none;
-      padding: 1rem 1.5rem;
-      color: var(--bs-secondary);
-      background: transparent;
-      transition: all 0.3s ease;
-      border-radius: 0.75rem 0.75rem 0 0;
-    }
+    .result-section { background: rgba(0,0,0,0.45); padding: 1rem; border-radius: .65rem; }
+    .result-value { font-family: 'Courier New', monospace; color:#7ef9c7; background: rgba(0,0,0,0.35); padding:.6rem; border-radius:.5rem; }
 
-    .nav-tabs .nav-link:hover {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
+    .btn-pill { border-radius: 999px; }
+    .highlight { color:#7ef9c7; }
 
-    .nav-tabs .nav-link.active {
-      background: linear-gradient(90deg, #007bff, #00c6ff);
-      color: #fff !important;
-      font-weight: 600;
-      border: none;
-    }
+    .small-muted { color:#a3b2c8; }
 
-    .examples-help {
-      background: rgba(255,255,255,0.05);
-      padding: 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .example-btn {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 20px;
-    }
-
-    .result-section {
-      background: rgba(0,0,0,0.4);
-      padding: 1.5rem;
-      border-radius: 0.75rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    .result-display { display: grid; gap: 1rem; }
-
-    .result-item { display: flex; flex-direction: column; gap: 0.25rem; }
-
-    .result-value {
-      font-family: "Courier New", monospace;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #00ffae;
-      background: rgba(0,0,0,0.5);
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      word-break: break-all;
-      animation: fadeInScale 0.4s ease;
-    }
-
-    .btn-primary, .btn-info, .btn-outline-secondary {
-      border-radius: 30px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary:hover, .btn-info:hover, .btn-outline-secondary:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0, 123, 255, 0.7);
-    }
-
-    .converter-section {
-      background: rgba(255,255,255,0.05);
-      padding: 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      margin-top: 1rem;
-    }
-
-    @keyframes fadeInScale {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .btn.loading { position: relative; color: transparent; }
-    .btn.loading::after {
-      content: "";
-      position: absolute; top: 50%; left: 50%;
-      width: 1rem; height: 1rem;
-      margin-top: -0.5rem; margin-left: -0.5rem;
-      border: 2px solid transparent; border-top-color: currentColor;
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-    .fade-in { animation: fadeIn 0.3s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes popIn { from { opacity:0; transform: translateY(6px) scale(.98);} to { opacity:1; transform:none; } }
+    .pop { animation: popIn .28s ease; }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+  <nav class="navbar navbar-dark bg-transparent px-3 py-3">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="#">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
-          <rect width="32" height="32" rx="6" fill="var(--bs-primary)" />
-          <path d="M8 10h16v2H8v-2zm0 5h16v2H8v-2zm0 5h16v2H8v-2z" fill="white" />
-          <circle cx="26" cy="6" r="1.5" fill="var(--bs-success)" />
-        </svg>
-        Advanced Calculator
+        <div class="me-2" style="width:36px;height:36px;background:linear-gradient(135deg,#06b6d4,#3b82f6);border-radius:8px;"></div>
+        <div>
+          <div style="font-weight:700">7th Grade Math Toolkit</div>
+          <small class="small-muted">Fractions • Ratios • Algebra • Geometry • Stats • Probability</small>
+        </div>
       </a>
-      <span class="navbar-text">⚡ Professional Mathematical Computing</span>
     </div>
   </nav>
 
-  <div class="container my-5">
+  <div class="container my-4">
     <div class="row justify-content-center">
-      <div class="col-lg-10 col-xl-8">
-        <div class="calculator-header text-center mb-4">
-          <h1 class="h3 mb-2">Mathematical Calculator</h1>
-          <p class="text-muted">Choose your calculation mode and start computing</p>
-        </div>
+      <div class="col-xl-10 col-lg-11">
 
-        <div class="calculator-container">
-          <ul class="nav nav-tabs nav-fill" id="calculatorTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="fraction-tab" data-bs-toggle="tab" data-bs-target="#fraction-calculator" type="button" role="tab">÷ Fraction Calculator</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="scientific-tab" data-bs-toggle="tab" data-bs-target="#scientific-calculator" type="button" role="tab">↗ Scientific Notation</button>
-            </li>
+        <div class="calculator-container p-3 p-md-4">
+          <ul class="nav nav-tabs flex-nowrap" id="mathTabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#fractions">Fractions</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ratios">Ratios</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#integers">Integers</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#algebra">Algebra</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#geometry">Geometry</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#statistics">Statistics</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#probability">Probability</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#scientific">Scientific</button></li>
           </ul>
 
-          <div class="tab-content" id="calculatorTabContent">
-            <!-- Fraction Calculator -->
-            <div class="tab-pane fade show active" id="fraction-calculator" role="tabpanel">
-              <div class="calculator-panel">
-                <h4 class="h5 mb-3">÷ Complex Fraction Calculator</h4>
+          <div class="tab-content mt-3">
 
-                <div class="examples-help mb-4">
-                  <h6 class="small text-muted mb-2">Example expressions:</h6>
-                  <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#fractionInput" data-example="(3/4) / (5/6)"><code>(3/4) / (5/6)</code></button>
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#fractionInput" data-example="((1/2) + (1/3)) * (2/5)"><code>((1/2) + (1/3)) * (2/5)</code></button>
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#fractionInput" data-example="(7/8) - (3/4) + (1/2)"><code>(7/8) - (3/4) + (1/2)</code></button>
-                  </div>
-                </div>
-
-                <form id="fractionForm">
+            <!-- FRACTIONS -->
+            <div class="tab-pane fade show active" id="fractions">
+              <div class="row">
+                <div class="col-md-7">
                   <div class="mb-3">
-                    <label for="fractionInput" class="form-label">Fraction Expression</label>
-                    <input type="text" class="form-control form-control-lg" id="fractionInput" placeholder="Enter fraction expression (e.g., (3/4) / (5/6))" autocomplete="off" />
+                    <label class="form-label">Fraction Expression</label>
+                    <input id="fracExpr" class="form-control" placeholder="e.g. (3/4) + (1/8) * (2/3)" />
                   </div>
-                  <button type="submit" class="btn btn-primary btn-lg w-100">🧮 Calculate Fraction</button>
-                </form>
+                  <div class="d-flex gap-2 mb-3">
+                    <button class="btn btn-outline-secondary example-btn" data-target="#fracExpr" data-example="(3/4)/(5/6)">Example</button>
+                    <button id="fracCalcBtn" class="btn btn-pill btn-primary">Calculate</button>
+                    <button id="fracSimplifyBtn" class="btn btn-outline-secondary btn-pill">Simplify single fraction</button>
+                  </div>
 
-                <div id="fractionResult" class="result-section mt-4" style="display: none;">
-                  <h5 class="text-success mb-3">✅ Result</h5>
-                  <div class="result-display">
-                    <div class="result-item">
-                      <label class="small text-muted">Fraction Form:</label>
-                      <div class="result-value" id="fractionValue"></div>
-                    </div>
-                    <div class="result-item">
-                      <label class="small text-muted">Decimal Form:</label>
-                      <div class="result-value" id="decimalValue"></div>
-                    </div>
+                  <div class="result-section mt-2" id="fracResult" style="display:none">
+                    <div class="mb-2 small-muted">Fraction:</div>
+                    <div class="result-value" id="fracFraction"></div>
+                    <div class="mt-2 small-muted">Decimal:</div>
+                    <div class="result-value" id="fracDecimal"></div>
                   </div>
                 </div>
-
-                <div id="fractionError" class="alert alert-danger mt-4" style="display: none;">⚠️ <span id="fractionErrorText"></span></div>
+                <div class="col-md-5">
+                  <div class="examples-help">
+                    <div class="small-muted mb-2">Quick tools</div>
+                    <div class="mb-2"><button id="toMixedBtn" class="btn btn-sm btn-outline-secondary">Convert to mixed number</button></div>
+                    <div class="small-muted">Enter a single fraction like <code>7/4</code> and press "Simplify single fraction"</div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <!-- Scientific Calculator -->
-            <div class="tab-pane fade" id="scientific-calculator" role="tabpanel">
-              <div class="calculator-panel">
-                <h4 class="h5 mb-3">↗ Scientific Notation Calculator</h4>
-
-                <div class="examples-help mb-4">
-                  <h6 class="small text-muted mb-2">Example expressions:</h6>
-                  <div class="d-flex flex-wrap gap-2">
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#scientificInput" data-example="1.5e6 + 2.3e5"><code>1.5e6 + 2.3e5</code></button>
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#scientificInput" data-example="6.02e23 * 1.38e-23"><code>6.02e23 * 1.38e-23</code></button>
-                    <button class="btn btn-outline-secondary btn-sm example-btn" data-target="#scientificInput" data-example="(2.5e8) / (5e3)"><code>(2.5e8) / (5e3)</code></button>
+            <!-- RATIOS -->
+            <div class="tab-pane fade" id="ratios">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Simplify Ratio (format: a:b)</label>
+                  <input id="ratioInput" class="form-control" placeholder="e.g. 12:8" />
+                  <div class="d-flex gap-2 mt-2">
+                    <button id="ratioSimplifyBtn" class="btn btn-primary btn-pill">Simplify</button>
+                    <button id="ratioProportionBtn" class="btn btn-outline-secondary btn-pill">Solve proportion (a:b = c:x)</button>
+                  </div>
+                  <div class="result-section mt-3" id="ratioResult" style="display:none">
+                    <div class="small-muted">Simplified:</div>
+                    <div class="result-value" id="ratioSimplified"></div>
+                    <div class="small-muted mt-2">Proportion Result (x):</div>
+                    <div class="result-value" id="ratioProportionResult"></div>
                   </div>
                 </div>
-
-                <!-- Scientific Expression Calculator -->
-                <form id="scientificForm" class="mb-4">
-                  <div class="mb-3">
-                    <label for="scientificInput" class="form-label">Scientific Expression</label>
-                    <input type="text" class="form-control form-control-lg" id="scientificInput" placeholder="Enter scientific expression (e.g., 1.5e6 + 2.3e5)" autocomplete="off" />
-                  </div>
-                  <button type="submit" class="btn btn-info btn-lg w-100">🧮 Calculate Scientific</button>
-                </form>
-
-                <!-- Number Converter -->
-                <div class="converter-section">
-                  <h5 class="h6 mb-3 text-muted">Number Format Converter</h5>
-                  <form id="converterForm">
-                    <div class="input-group">
-                      <input type="text" class="form-control" id="converterInput" placeholder="Enter number to convert (e.g., 1500000)" autocomplete="off" />
-                      <button type="submit" class="btn btn-outline-secondary">Convert</button>
-                    </div>
-                  </form>
-                </div>
-
-                <div id="scientificResult" class="result-section mt-4" style="display: none;">
-                  <h5 class="text-success mb-3">✅ Result</h5>
-                  <div class="result-display">
-                    <div class="result-item">
-                      <label class="small text-muted">Primary Display:</label>
-                      <div class="result-value" id="primaryValue"></div>
-                    </div>
-                    <div class="result-item">
-                      <label class="small text-muted">Scientific Notation:</label>
-                      <div class="result-value" id="scientificValue"></div>
-                    </div>
-                    <div class="result-item">
-                      <label class="small text-muted">Standard Notation:</label>
-                      <div class="result-value" id="standardValue"></div>
-                    </div>
+                <div class="col-md-6">
+                  <div class="examples-help">
+                    <div class="small-muted mb-2">Proportion solver</div>
+                    <div class="mb-2">Enter values for a, b, c then click Solve to find x where a:b = c:x</div>
+                    <div class="input-group mb-2"><input id="pA" class="form-control" placeholder="a"><input id="pB" class="form-control" placeholder="b"><input id="pC" class="form-control" placeholder="c"></div>
+                    <button id="pSolve" class="btn btn-sm btn-primary">Solve</button>
                   </div>
                 </div>
-
-                <div id="scientificError" class="alert alert-danger mt-4" style="display: none;">⚠️ <span id="scientificErrorText"></span></div>
               </div>
             </div>
+
+            <!-- INTEGERS -->
+            <div class="tab-pane fade" id="integers">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Integer Operation</label>
+                  <div class="input-group mb-2">
+                    <input id="intA" class="form-control" placeholder="e.g. -5" />
+                    <select id="intOp" class="form-select" style="max-width:120px"><option value="+">+</option><option value="-">-</option><option value="*">×</option><option value="/">÷</option></select>
+                    <input id="intB" class="form-control" placeholder="e.g. 3" />
+                  </div>
+                  <button id="intCalcBtn" class="btn btn-primary btn-pill">Compute</button>
+
+                  <div class="result-section mt-3" id="intResult" style="display:none">
+                    <div class="small-muted">Result:</div>
+                    <div class="result-value" id="intValue"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="examples-help">
+                    <div class="small-muted">Absolute value helper</div>
+                    <div class="input-group"><input id="absInput" class="form-control" placeholder="e.g. -12"><button id="absBtn" class="btn btn-outline-secondary">|x|</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ALGEBRA -->
+            <div class="tab-pane fade" id="algebra">
+              <div class="row">
+                <div class="col-md-7">
+                  <label class="form-label">Solve linear equation (one variable, e.g. 2x+3=7)</label>
+                  <input id="eqInput" class="form-control" placeholder="e.g. 2x + 3 = 7 or 3*x - 4 = 2" />
+                  <div class="d-flex gap-2 mt-2"><button id="solveEqBtn" class="btn btn-primary btn-pill">Solve</button><button id="simplifyExprBtn" class="btn btn-outline-secondary btn-pill">Simplify Expression</button></div>
+                  <div class="result-section mt-3" id="eqResult" style="display:none">
+                    <div class="small-muted">Solution:</div>
+                    <div class="result-value" id="eqSolution"></div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="examples-help">
+                    <div class="small-muted">Tips</div>
+                    <ul class="mb-0"><li>Use <code>x</code> as variable.</li><li>Supported: + - * / and parentheses.</li></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GEOMETRY -->
+            <div class="tab-pane fade" id="geometry">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Rectangle — width and height</label>
+                  <div class="input-group mb-2"><input id="rectW" class="form-control" placeholder="width"><input id="rectH" class="form-control" placeholder="height"></div>
+                  <button id="rectBtn" class="btn btn-primary btn-pill">Area & Perimeter</button>
+
+                  <hr class="my-3" />
+                  <label class="form-label">Circle — radius</label>
+                  <div class="input-group mb-2"><input id="circR" class="form-control" placeholder="radius"></div>
+                  <button id="circBtn" class="btn btn-primary btn-pill">Area & Circumference</button>
+                </div>
+                <div class="col-md-6">
+                  <div class="result-section" id="geoResult" style="display:none">
+                    <div class="small-muted">Geometry Results</div>
+                    <div class="mt-2"><div class="small-muted">Rectangle:</div><div class="result-value" id="rectResult"></div></div>
+                    <div class="mt-2"><div class="small-muted">Circle:</div><div class="result-value" id="circResult"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="tab-pane fade" id="statistics">
+              <div class="row">
+                <div class="col-md-8">
+                  <label class="form-label">Enter numbers (comma separated)</label>
+                  <input id="statsInput" class="form-control" placeholder="e.g. 3,6,7,9,3" />
+                  <div class="d-flex gap-2 mt-2"><button id="statsCalcBtn" class="btn btn-primary btn-pill">Calculate</button><button id="randBtn" class="btn btn-outline-secondary">Random sample</button></div>
+
+                  <div class="result-section mt-3" id="statsResult" style="display:none">
+                    <div class="small-muted">Mean</div><div class="result-value" id="meanVal"></div>
+                    <div class="small-muted mt-2">Median</div><div class="result-value" id="medianVal"></div>
+                    <div class="small-muted mt-2">Mode</div><div class="result-value" id="modeVal"></div>
+                    <div class="small-muted mt-2">Range</div><div class="result-value" id="rangeVal"></div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="examples-help small-muted">Statistics tools help you quickly summarize data sets for 7th-grade problems.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PROBABILITY -->
+            <div class="tab-pane fade" id="probability">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Simple probability: favorable outcomes / total outcomes</label>
+                  <div class="input-group mb-2"><input id="fav" class="form-control" placeholder="favorable"><input id="total" class="form-control" placeholder="total"></div>
+                  <button id="probBtn" class="btn btn-primary btn-pill">Compute Probability</button>
+
+                  <div class="result-section mt-3" id="probResult" style="display:none">
+                    <div class="small-muted">Probability (fraction)</div><div class="result-value" id="probFrac"></div>
+                    <div class="small-muted mt-2">Decimal</div><div class="result-value" id="probDec"></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="examples-help small-muted">Try coin flips (1/2), dice rolls (1/6), or combined simple events.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCIENTIFIC (kept from previous) -->
+            <div class="tab-pane fade" id="scientific">
+              <div class="row">
+                <div class="col-md-8">
+                  <label class="form-label">Scientific Expression</label>
+                  <input id="sciInput" class="form-control" placeholder="e.g. 1.5e6 * 2" />
+                  <div class="d-flex gap-2 mt-2"><button id="sciCalcBtn" class="btn btn-primary btn-pill">Calculate</button><button id="toSciBtn" class="btn btn-outline-secondary btn-pill">To Scientific Notation</button></div>
+
+                  <div class="result-section mt-3" id="sciResult" style="display:none">
+                    <div class="small-muted">Primary</div><div class="result-value" id="sciPrimary"></div>
+                    <div class="small-muted mt-2">Scientific</div><div class="result-value" id="sciScientific"></div>
+                    <div class="small-muted mt-2">Standard</div><div class="result-value" id="sciStandard"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- Email Interface -->
-        <div class="card mt-5">
+        <!-- Email / Contact -->
+        <div class="card mt-4 p-3">
           <div class="card-body">
-            <h4 class="h5 mb-3">📧 Contact / Feedback</h4>
+            <h5>📧 Contact / Feedback</h5>
             <form action="https://formspree.io/f/YOUR_ENDPOINT" method="POST">
-              <div class="mb-3">
-                <label for="email" class="form-label">Your Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" required>
+              <div class="row g-2">
+                <div class="col-md-5"><input name="email" type="email" class="form-control" placeholder="you@example.com" required></div>
+                <div class="col-md-5"><input name="subject" class="form-control" placeholder="Subject"></div>
+                <div class="col-md-2 d-grid"><button class="btn btn-primary">Send</button></div>
+                <div class="col-12 mt-2"><textarea name="message" rows="3" class="form-control" placeholder="Message"></textarea></div>
               </div>
-              <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="4" placeholder="Type your feedback..." required></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary w-100">Send Message</button>
             </form>
           </div>
         </div>
@@ -284,15 +283,146 @@
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- math.js (supports Fractions & BigNumbers) -->
   <script src="https://cdn.jsdelivr.net/npm/mathjs@11/lib/browser/math.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // JavaScript logic stays the same as before (unchanged for brevity)
-    const mathFraction = math.create({ number: 'Fraction' });
-    const mathBig = math.create({ number: 'BigNumber', precision: 50 });
-    // ... [Calculator class + event listeners unchanged] ...
+    // Create math.js instances
+    const mf = math.create({ number: 'Fraction' });
+    const mb = math.create({ number: 'BigNumber', precision: 64 });
+
+    // Utility helpers
+    const $ = (id) => document.getElementById(id);
+    function show(id){ const e=$(id); if(e){ e.style.display='block'; e.classList.add('pop'); }}
+    function hide(id){ const e=$(id); if(e){ e.style.display='none'; e.classList.remove('pop'); }}
+
+    // FRACTIONS
+    $('fracCalcBtn').addEventListener('click', ()=>{
+      const expr = $('fracExpr').value.trim(); if(!expr) return;
+      try{
+        const res = mf.evaluate(expr);
+        if(res && typeof res === 'object' && 'n' in res && 'd' in res){
+          $('fracFraction').textContent = res.toFraction ? res.toFraction() : res.toString();
+          $('fracDecimal').textContent = mf.number(res).toString();
+        } else {
+          $('fracFraction').textContent = res.toString();
+          $('fracDecimal').textContent = Number(res).toString();
+        }
+        show('fracResult');
+      }catch(err){ alert('Invalid expression: '+err.message); }
+    });
+
+    $('fracSimplifyBtn').addEventListener('click', ()=>{
+      const v = $('fracExpr').value.trim(); if(!v) return; // expect single fraction
+      try{
+        const frac = mf.fraction(v);
+        $('fracFraction').textContent = frac.toFraction();
+        $('fracDecimal').textContent = mf.number(frac).toString();
+        show('fracResult');
+      }catch(e){ alert('Enter a single fraction like 7/4'); }
+    });
+
+    // RATIOS
+    function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ const t=b; b=a%b; a=t; } return a; }
+    $('ratioSimplifyBtn').addEventListener('click', ()=>{
+      const raw = $('ratioInput').value.trim(); if(!raw) return; const parts = raw.split(':'); if(parts.length!==2){ alert('Use a:b format'); return; }
+      const a = Number(parts[0]), b = Number(parts[1]); if(!isFinite(a)||!isFinite(b)) return alert('Invalid numbers');
+      const g = gcd(a,b); $('ratioSimplified').textContent = (a/g)+ ':' + (b/g); show('ratioResult');
+    });
+    $('pSolve').addEventListener('click', ()=>{
+      const a=Number($('pA').value), b=Number($('pB').value), c=Number($('pC').value);
+      if(!isFinite(a)||!isFinite(b)||!isFinite(c)) return alert('Enter numbers for a,b,c');
+      const x = (b===0)? 'undefined' : (c*b)/a; // solving a:b = c:x => x = (c*b)/a
+      $('ratioProportionResult').textContent = String(x);
+      show('ratioResult');
+    });
+
+    // INTEGERS
+    $('intCalcBtn').addEventListener('click', ()=>{
+      const a=Number($('intA').value), b=Number($('intB').value), op=$('intOp').value;
+      if(!isFinite(a)||!isFinite(b)) return alert('Enter integers');
+      let r;
+      if(op==='+') r=a+b; else if(op==='-') r=a-b; else if(op==='*') r=a*b; else if(op==='/') r=(b===0)? '∞' : a/b;
+      $('intValue').textContent = String(r);
+      show('intResult');
+    });
+    $('absBtn').addEventListener('click', ()=>{ const v=Number($('absInput').value); if(!isFinite(v)) return; $('intValue').textContent = String(Math.abs(v)); show('intResult'); });
+
+    // ALGEBRA: simple linear solver for ax + b = c
+    function solveLinear(equation){ // supports forms like 2x+3=7 or 3*x-4=2
+      const eq = equation.replace(/\s+/g,'');
+      const sides = eq.split('='); if(sides.length!==2) throw new Error('Equation must contain one =');
+      const left = sides[0], right = sides[1];
+      // Convert implicit multiplication like 2x to 2*x
+      const leftNorm = left.replace(/(\d)(x)/g,'$1*$2');
+      const rightNorm = right.replace(/(\d)(x)/g,'$1*$2');
+      // collect coefficient of x on left
+      // We'll evaluate numeric coefficient by treating x=1 and x=0
+      const leftWith1 = leftNorm.replace(/x/g,'(1)');
+      const leftWith0 = leftNorm.replace(/x/g,'(0)');
+      const rightWith1 = rightNorm.replace(/x/g,'(1)');
+      const rightWith0 = rightNorm.replace(/x/g,'(0)');
+      const L1 = mb.evaluate(leftWith1); const L0 = mb.evaluate(leftWith0);
+      const R1 = mb.evaluate(rightWith1); const R0 = mb.evaluate(rightWith0);
+      const coeff = Number(L1) - Number(L0) - (Number(R1) - Number(R0));
+      const constant = Number(R0) - Number(L0);
+      if(coeff===0) throw new Error('No unique solution (coefficient 0)');
+      const x = constant/coeff; return x;
+    }
+    $('solveEqBtn').addEventListener('click', ()=>{
+      const s = $('eqInput').value.trim(); if(!s) return; try{ const sol = solveLinear(s); $('eqSolution').textContent = 'x = ' + math.format(sol, {precision: 14}); show('eqResult'); }catch(err){ alert('Could not solve: '+err.message); }
+    });
+    $('simplifyExprBtn').addEventListener('click', ()=>{ const s=$('eqInput').value.trim(); if(!s) return; try{ const simp = mf.simplify ? mf.simplify(s) : mb.evaluate(s); $('eqSolution').textContent = String(simp); show('eqResult'); }catch(e){ alert('Unable to simplify'); } });
+
+    // GEOMETRY
+    $('rectBtn').addEventListener('click', ()=>{
+      const w=Number($('rectW').value), h=Number($('rectH').value); if(!isFinite(w)||!isFinite(h)) return alert('Enter width and height');
+      const area = w*h; const peri = 2*(w+h);
+      $('rectResult').textContent = `Area = ${area}, Perimeter = ${peri}`; show('geoResult');
+    });
+    $('circBtn').addEventListener('click', ()=>{
+      const r=Number($('circR').value); if(!isFinite(r)) return alert('Enter radius');
+      const area = Math.PI * r * r; const circ = 2*Math.PI*r;
+      $('circResult').textContent = `Area = ${math.format(area, {precision:6})}, Circumference = ${math.format(circ,{precision:6})}`; show('geoResult');
+    });
+
+    // STATISTICS
+    function parseList(str){ return str.split(',').map(s=>Number(s.trim())).filter(n=>!Number.isNaN(n)); }
+    $('statsCalcBtn').addEventListener('click', ()=>{
+      const arr = parseList($('statsInput').value); if(arr.length===0) return alert('Enter numbers');
+      const mean = arr.reduce((a,b)=>a+b,0)/arr.length;
+      const sorted = arr.slice().sort((a,b)=>a-b);
+      const mid = Math.floor(sorted.length/2);
+      const median = (sorted.length%2===1)? sorted[mid] : (sorted[mid-1]+sorted[mid])/2;
+      // mode
+      const counts = {}; sorted.forEach(n=>counts[n]=(counts[n]||0)+1);
+      let mode = []; let maxc=0; for(const k in counts){ if(counts[k]>maxc){ maxc=counts[k]; mode=[Number(k)]; } else if(counts[k]===maxc){ mode.push(Number(k)); }}
+      const range = sorted[sorted.length-1]-sorted[0];
+      $('meanVal').textContent = math.format(mean,{precision:10});
+      $('medianVal').textContent = String(median);
+      $('modeVal').textContent = mode.join(', ');
+      $('rangeVal').textContent = String(range);
+      show('statsResult');
+    });
+    $('randBtn').addEventListener('click', ()=>{ const arr = Array.from({length:6}, ()=>Math.floor(Math.random()*10)+1); $('statsInput').value = arr.join(', '); $('statsCalcBtn').click(); });
+
+    // PROBABILITY
+    $('probBtn').addEventListener('click', ()=>{
+      const f = Number($('fav').value), t = Number($('total').value); if(!isFinite(f)||!isFinite(t)||t===0) return alert('Enter valid numbers');
+      const frac = mf.fraction(f, t);
+      $('probFrac').textContent = frac.toFraction(); $('probDec').textContent = math.format(Number(f)/Number(t), {precision:8}); show('probResult');
+    });
+
+    // SCIENTIFIC
+    $('sciCalcBtn').addEventListener('click', ()=>{
+      const v=$('sciInput').value.trim(); if(!v) return; try{ const r = mb.evaluate(v); const asNum = Number(r); const sci = mb.format(r, {notation:'exponential', precision:6}); const std = mb.format(r); $('sciPrimary').textContent = (Math.abs(asNum)>=1e6||Math.abs(asNum)<1e-3)? sci : std; $('sciScientific').textContent = sci; $('sciStandard').textContent = std; show('sciResult'); }catch(e){ alert('Invalid expression'); }
+    });
+    $('toSciBtn').addEventListener('click', ()=>{ const v=Number($('sciInput').value); if(!isFinite(v)) return alert('Enter a number'); const s = v.toExponential(6); $('sciScientific').textContent = s; show('sciResult'); });
+
+    // wire example buttons
+    document.querySelectorAll('.example-btn').forEach(b=>b.addEventListener('click', (e)=>{ e.preventDefault(); const trg = document.querySelector(b.getAttribute('data-target')); if(trg) trg.value = b.getAttribute('data-example'); }));
+
+    // small polyfills to avoid errors if elements missing
+    ['fracResult','ratioResult','intResult','eqResult','geoResult','statsResult','probResult','sciResult'].forEach(id=>{ if(!$(id)) return; });
   </script>
 </body>
 </html>
